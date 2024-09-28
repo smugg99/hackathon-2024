@@ -111,10 +111,13 @@ plt.figure(figsize=(14, 8))
 
 # Subplot 1: Distribution of data
 plt.subplot(1, 2, 1)
+feature_1_name = cancer.feature_names[0] 
+feature_2_name = cancer.feature_names[1]  
+
 plt.scatter(X[:, 0], X[:, 1], c=y, cmap=ListedColormap(['red', 'green', 'blue']), edgecolor='k')
 plt.title('Breast Cancer Data - Distribution')
-plt.xlabel('Feature 1')
-plt.ylabel('Feature 2')
+plt.xlabel(feature_1_name)
+plt.ylabel(feature_2_name)
 
 # Subplot 2: Comparison of model accuracies
 plt.subplot(1, 2, 2)
