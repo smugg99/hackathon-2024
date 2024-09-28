@@ -8,6 +8,8 @@ from qiskit_aer import AerSimulator
 from qiskit_algorithms import Grover
 import numpy as np
 from sklearn.model_selection import cross_val_score
+import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
 
 # 1. Klasyczny model SVM z klasyczną optymalizacją
 # Załaduj dane Iris
@@ -82,14 +84,37 @@ print(f"Najlepsza wartość C uzyskana z optymalizacji kwantowej: {best_C_from_g
 # 3. Zastosowanie optymalnej wartości C do klasycznego modelu SVM
 # Tworzymy model SVM z wartością C uzyskaną z optymalizacji kwantowej
 svm_quantum = SVC(kernel='linear', C=best_C_from_grover)
+print(X_train, y_train)
 svm_quantum.fit(X_train, y_train)
 
 # Zastosowanie walidacji krzyżowej
 cv_scores = cross_val_score(svm_quantum, X, y, cv=5)  # 5-fold cross-validation
 
-# Dokonaj predykcji i oceń dokładność modelu
-y_pred_quantum = svm_quantum.predict(X_test)
-accuracy_quantum = accuracy_score(y_test, y_pred_quantum)
 
 print(f"Wyniki walidacji krzyżowej: {cv_scores}")
 print(f"Średnia dokładność z walidacji krzyżowej: {np.mean(cv_scores) * 100:.2f}%")
+
+
+
+# Wizualizacja danych Iris w przestrzeni cech
+plt.figure(figsize=(14, 6))
+
+# Subplot 1: Rozkład danych
+plt.subplot(1, 2, 1)
+plt.scatter(X[:, 0], X[:, 1], c=y, cmap=ListedColormap(['red', 'green', 'blue']), edgecolor='k')
+plt.title('Dane Iris - Rozkład')
+plt.xlabel('Długość działki (sepal length)')
+plt.ylabel('Szerokość działki (sepal width)')
+
+# Subplot 2: Porównanie dokładności modeli
+plt.subplot(1, 2, 2)
+plt.bar(['Klasyczny SVM', 'SVM z optymalizacją kwantową'], 
+        [accuracy_score(y_test, y_pred) * 100, np.mean(cv_scores) * 100], 
+        color=['orange', 'purple'])
+plt.title('Porównanie dokładności modeli')
+plt.ylabel('Dokładność (%)')
+plt.ylim(90, 100)  # Ustawienie skali Y od 90% do 100%
+
+# Wyświetlenie wizualizacji
+plt.tight_layout()
+plt.show()
