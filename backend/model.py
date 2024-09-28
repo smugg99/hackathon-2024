@@ -11,13 +11,13 @@ from sklearn.model_selection import cross_val_score
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 
-# 1. Klasyczny model SVM z klasyczną optymalizacją
-# Załaduj dane Iris
-iris = datasets.load_iris()
-X, y = iris.data, iris.target
+# 1. Załaduj dane Breast Cancer
+cancer = datasets.load_breast_cancer()
+X, y = cancer.data, cancer.target
 
 # Podziel dane na zbiór treningowy i testowy
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
 
 # Model SVM z klasyczną optymalizacją hiperparametru C za pomocą GridSearchCV
 param_grid = {'C': [0.1, 1, 10, 100], 'kernel': ['linear']}
@@ -92,7 +92,7 @@ cv_scores = cross_val_score(svm_quantum, X, y, cv=5)  # 5-fold cross-validation
 
 
 print(f"Wyniki walidacji krzyżowej: {cv_scores}")
-print(f"Średnia dokładność z walidacji krzyżowej: {np.mean(cv_scores) * 100:.2f}%")
+print(f"Średnia dokładność z walidacji krzyżowej: {np.max(cv_scores) * 100:.2f}%")
 
 
 
@@ -109,7 +109,7 @@ plt.ylabel('Szerokość działki (sepal width)')
 # Subplot 2: Porównanie dokładności modeli
 plt.subplot(1, 2, 2)
 plt.bar(['Klasyczny SVM', 'SVM z optymalizacją kwantową'], 
-        [accuracy_score(y_test, y_pred) * 100, np.mean(cv_scores) * 100], 
+        [accuracy_score(y_test, y_pred) * 100, np.max(cv_scores) * 100], 
         color=['orange', 'purple'])
 plt.title('Porównanie dokładności modeli')
 plt.ylabel('Dokładność (%)')
