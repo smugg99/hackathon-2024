@@ -1,4 +1,4 @@
-# Importujemy wymagane biblioteki
+# Import required libraries
 from sklearn import datasets
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.svm import SVC
@@ -11,63 +11,62 @@ from sklearn.model_selection import cross_val_score
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 
-# 1. Załaduj dane Breast Cancer
+# 1. Load Breast Cancer data
 cancer = datasets.load_breast_cancer()
 X, y = cancer.data, cancer.target
 
-# Podziel dane na zbiór treningowy i testowy
+# Split data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-
-# Model SVM z klasyczną optymalizacją hiperparametru C za pomocą GridSearchCV
+# Model SVM with classical hyperparameter C optimization using GridSearchCV
 param_grid = {'C': [0.1, 1, 10, 100], 'kernel': ['linear']}
 grid_search = GridSearchCV(SVC(), param_grid, refit=True, verbose=1)
 grid_search.fit(X_train, y_train)
 
-# Zastosowanie najlepszego modelu
+# Applying the best model
 best_model = grid_search.best_estimator_
 y_pred = best_model.predict(X_test)
 
-# Wyświetlenie wyników
-print(f"Najlepsze parametry (klasyczna optymalizacja): {grid_search.best_params_}")
-print(f"Dokładność klasycznego SVM: {accuracy_score(y_test, y_pred) * 100:.2f}%")
+# Display results
+print(f"Best parameters (classical optimization): {grid_search.best_params_}")
+print(f"Accuracy of classical SVM: {accuracy_score(y_test, y_pred) * 100:.2f}%")
 
-# 2. Optymalizacja kwantowa za pomocą algorytmu Grovera
-# Definiujemy niestandardowe orakulum
+# 2. Quantum optimization using Grover's algorithm
+# Defining a custom oracle
 def custom_oracle(num_qubits):
-    # Tworzymy obwód kwantowy dla orakulum
+    # Create a quantum circuit for the oracle
     qc = QuantumCircuit(num_qubits)
     
-    # Przykładowe orakulum: odwrócenie fazy dla konkretnego stanu
-    # Tu załóżmy, że szukamy stanu |11> na dwóch kubitach
-    qc.cz(0, 1)  # Odwróć fazę dla stanu |11>
+    # Example oracle: phase inversion for a specific state
+    # Assume we are looking for the state |11> on two qubits
+    qc.cz(0, 1)  # Invert phase for the state |11|
     
     return qc
 
-# Parametry do problemu Grovera
+# Parameters for Grover's problem
 num_qubits = 2
 oracle_circuit = custom_oracle(num_qubits)
 
-# Tworzymy obwód Grovera
+# Creating Grover's circuit
 qc = QuantumCircuit(num_qubits)
-qc.h([0, 1])  # Inicjalizacja kubitów w stanie superpozycji
-qc.compose(oracle_circuit, inplace=True)  # Dodajemy orakulum
-qc.h([0, 1])  # Zastosowanie bramek Hadamarda ponownie
+qc.h([0, 1])  # Initialize qubits in superposition state
+qc.compose(oracle_circuit, inplace=True)  # Add the oracle
+qc.h([0, 1])  # Apply Hadamard gates again
 
-# Dodajemy pomiary do obwodu
-qc.measure_all()  # Dodajemy pomiar do wszystkich kubitów
+# Adding measurements to the circuit
+qc.measure_all()  # Add measurement to all qubits
 
-# Uruchomienie symulacji z użyciem AerSimulator
-backend = AerSimulator()  # Używamy AerSimulator
-qc = transpile(qc, backend)  # Transpilacja obwodu
-job = backend.run(qc, shots=1024)  # Uruchomienie symulacji
+# Running the simulation using AerSimulator
+backend = AerSimulator()  # Using AerSimulator
+qc = transpile(qc, backend)  # Transpile the circuit
+job = backend.run(qc, shots=1024)  # Run the simulation
 result = job.result()
 counts = result.get_counts()
 
-# Wyświetlenie wyników symulacji
-print(f"Wyniki optymalizacji kwantowej (wynik orakulum): {counts}")
+# Display the results of the simulation
+print(f"Results of quantum optimization (oracle result): {counts}")
 
-# Zdefiniowanie mapowania stanów do wartości C
+# Defining a mapping from states to C values
 state_to_C = {
     '00': 0.1,
     '01': 1,
@@ -75,46 +74,42 @@ state_to_C = {
     '11': 100
 }
 
-# Zidentyfikowanie stanu o najwyższej liczbie pomiarów
+# Identify the state with the highest measurement count
 optimal_state = max(counts, key=counts.get)
 best_C_from_grover = state_to_C[optimal_state]
 
-print(f"Najlepsza wartość C uzyskana z optymalizacji kwantowej: {best_C_from_grover}")
+print(f"Best C value obtained from quantum optimization: {best_C_from_grover}")
 
-# 3. Zastosowanie optymalnej wartości C do klasycznego modelu SVM
-# Tworzymy model SVM z wartością C uzyskaną z optymalizacji kwantowej
+# 3. Applying the optimal C value to the classical SVM model
+# Create an SVM model with the C value obtained from quantum optimization
 svm_quantum = SVC(kernel='linear', C=best_C_from_grover)
-print(X_train, y_train)
 svm_quantum.fit(X_train, y_train)
 
-# Zastosowanie walidacji krzyżowej
+# Applying cross-validation
 cv_scores = cross_val_score(svm_quantum, X, y, cv=5)  # 5-fold cross-validation
 
+print(f"Cross-validation results: {cv_scores}")
+print(f"Mean accuracy from cross-validation: {np.max(cv_scores) * 100:.2f}%")
 
-print(f"Wyniki walidacji krzyżowej: {cv_scores}")
-print(f"Średnia dokładność z walidacji krzyżowej: {np.max(cv_scores) * 100:.2f}%")
-
-
-
-# Wizualizacja danych Iris w przestrzeni cech
+# Visualization of the Breast Cancer data in feature space
 plt.figure(figsize=(14, 6))
 
-# Subplot 1: Rozkład danych
+# Subplot 1: Distribution of data
 plt.subplot(1, 2, 1)
-plt.scatter(X[:, 0], X[:, 1], c=y, cmap=ListedColormap(['red', 'green', 'blue']), edgecolor='k')
-plt.title('Dane Iris - Rozkład')
-plt.xlabel('Długość działki (sepal length)')
-plt.ylabel('Szerokość działki (sepal width)')
+plt.scatter(X[:, 0], X[:, 1], c=y, cmap=ListedColormap(['red', 'green']), edgecolor='k')
+plt.title('Breast Cancer Data - Distribution')
+plt.xlabel(cancer.feature_names[0])  # Use actual feature name
+plt.ylabel(cancer.feature_names[1])  # Use actual feature name
 
-# Subplot 2: Porównanie dokładności modeli
+# Subplot 2: Comparison of model accuracies
 plt.subplot(1, 2, 2)
-plt.bar(['Klasyczny SVM', 'SVM z optymalizacją kwantową'], 
+plt.bar(['Classical SVM', 'SVM with Quantum Optimization'], 
         [accuracy_score(y_test, y_pred) * 100, np.max(cv_scores) * 100], 
         color=['orange', 'purple'])
-plt.title('Porównanie dokładności modeli')
-plt.ylabel('Dokładność (%)')
-plt.ylim(90, 100)  # Ustawienie skali Y od 90% do 100%
+plt.title('Comparison of Model Accuracies')
+plt.ylabel('Accuracy (%)')
+plt.ylim(90, 100)  # Set Y scale from 90% to 100%
 
-# Wyświetlenie wizualizacji
+# Display the visualization
 plt.tight_layout()
 plt.show()
