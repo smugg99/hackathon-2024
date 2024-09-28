@@ -1,0 +1,1 @@
+pip install qiskit qiskit_aer
