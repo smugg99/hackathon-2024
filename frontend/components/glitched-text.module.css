@@ -1,0 +1,48 @@
+/* components/GlitchedText.module.css */
+.glitched {
+	display: inline-block;
+	position: relative;
+	font-size: 4rem;
+	/* Change font size as needed */
+	color: #fff;
+	/* Base text color */
+	overflow: hidden;
+}
+
+.char {
+	position: relative;
+	display: inline-block;
+	animation: glitch 1s infinite linear alternate-reverse;
+}
+
+@keyframes glitch {
+	0% {
+		transform: translate(0);
+		opacity: 1;
+	}
+
+	20% {
+		transform: translate(-2px, -2px);
+		opacity: 0.8;
+	}
+
+	40% {
+		transform: translate(2px, 2px);
+		opacity: 0.6;
+	}
+
+	60% {
+		transform: translate(-1px, 1px);
+		opacity: 0.4;
+	}
+
+	80% {
+		transform: translate(1px, -1px);
+		opacity: 0.6;
+	}
+
+	100% {
+		transform: translate(0);
+		opacity: 1;
+	}
+}

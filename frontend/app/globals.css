@@ -214,3 +214,31 @@ body {
   color: #ffcc00;
   /* Brighter yellow for contents inside curly braces */
 }
+
+.gradient-text {
+  background: linear-gradient(45deg, #04bac2, #e2047b);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: gradient-animation 5s ease infinite;
+    /* Adjust duration and timing as needed */
+    background-size: 400% 400%;
+    /* To create a smooth animation effect */
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+    /* Start at the first gradient position */
+  }
+
+  50% {
+    background-position: 100% 50%;
+    /* Transition to the second gradient position */
+  }
+
+  100% {
+    background-position: 0% 50%;
+    /* Loop back to the starting position */
+  }
+}

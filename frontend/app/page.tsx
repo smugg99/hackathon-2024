@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BinaryIcon, Github, GithubIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitch } from "@/components/theme-switch";
+import GlitchedText from "@/components/glitched-text";
 import {
   Card,
   CardContent,
@@ -42,7 +43,9 @@ export default async function Home() {
           >
             <BinaryIcon className="h-6 w-6" />
           </Link>
-          <strong className="text-lg font-semibold md:text-base">IBM QUANTUM COMPUTING - HackYeah 2024</strong>
+          <strong className="text-lg font-semibold md:text-base">
+            IBM QUANTUM COMPUTING - <span className="text-lg font-bold gradient-text">HackYeah 2024</span>
+          </strong>
         </nav>
         <div className="ml-auto flex items-center gap-2">
           <ThemeSwitch />
