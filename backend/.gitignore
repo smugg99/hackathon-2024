@@ -1,4 +1,5 @@
 env/
+./env/
 venv/
 depression_data.csv
 depression_data.csv.zip
