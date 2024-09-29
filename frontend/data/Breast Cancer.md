@@ -61,7 +61,7 @@ print(f"Najlepsze parametry (klasyczna optymalizacja): {grid_search.best_params_
 print(f"Dokładność klasycznego SVM: {accuracy_score(y_test, y_pred) * 100:.2f}%")
 ```
 
-- **Accuracy**: The accuracy of the classical SVM is evaluated on the test set, which gives insight into how well the model generalizes to unseen data.
+**Accuracy**: The accuracy of the classical SVM is evaluated on the test set, which gives insight into how well the model generalizes to unseen data.
 
 ## 3. Quantum Optimization: Grover's Algorithm
 

@@ -1,9 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Overpass:wght@400;700&display=swap');
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Overpass', sans-serif;
 }
 
 @layer utilities {
