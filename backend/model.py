@@ -103,7 +103,7 @@ cv_scores = cross_val_score(svm_quantum, X, y, cv=5)  # 5-fold cross-validation
 
 # Display the cross-validation results and time for the quantum-optimized SVM
 print(f"Cross-validation results: {cv_scores}")
-print(f"Mean accuracy from cross-validation: {np.max(cv_scores) * 100:.2f}%")
+print(f"Accuracy from cross-validation: {np.max(cv_scores) * 100:.2f}%")
 print(f"Time taken by quantum-optimized SVM: {end_quantum_svm - start_quantum_svm:.4f} seconds")
 
 # Visualization of the Breast Cancer data in feature space
