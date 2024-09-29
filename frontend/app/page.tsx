@@ -35,7 +35,7 @@ export default async function Home() {
             <Package2 className="h-6 w-6" />
             <span className="sr-only">Acme Inc</span>
           </Link>
-          Balls
+          IBM QUANTUM COMPUTING
         </nav>
       </header>
       <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10 h-full">
