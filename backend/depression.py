@@ -6,7 +6,7 @@ from sklearn.metrics import accuracy_score
 from qiskit import QuantumCircuit, transpile
 from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
-from cuml.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV
 import pandas as pd
 
 
@@ -121,7 +121,7 @@ qc.h([0, 1])  # Apply Hadamard gates again
 qc.measure_all()  # Add measurement to all qubits
 
 # Running the simulation using AerSimulator
-backend = AerSimulator(device="GPU")  # Using AerSimulator
+backend = AerSimulator()  # Using AerSimulator
 qc = transpile(qc, backend)  # Transpile the circuit
 job = backend.run(qc, shots=1024)  # Run the simulation
 result = job.result()
