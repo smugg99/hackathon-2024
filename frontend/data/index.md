@@ -12,7 +12,6 @@ The code presented combines both classical machine learning with quantum computi
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 
-# Load the breast cancer dataset
 cancer = datasets.load_breast_cancer()
 X, y = cancer.data, cancer.target
 ```
@@ -26,7 +25,6 @@ X, y = cancer.data, cancer.target
 ### Splitting the Data
 
 ```python
-# Split data into training and test sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 ```
 
@@ -41,12 +39,10 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 
-# Define parameter grid for C values and kernel types
 param_grid = {'C': [0.1, 1, 10, 100], 'kernel': ['linear']}
 grid_search = GridSearchCV(SVC(), param_grid, refit=True, verbose=1)
 grid_search.fit(X_train, y_train)
 
-# Evaluate the best model
 best_model = grid_search.best_estimator_
 y_pred = best_model.predict(X_test)
 ```
@@ -76,7 +72,7 @@ from qiskit import QuantumCircuit
 
 def custom_oracle(num_qubits):
     qc = QuantumCircuit(num_qubits)
-    qc.cz(0, 1)  # Phase flip for state |11>
+    qc.cz(0, 1)
     return qc
 ```
 
@@ -90,7 +86,7 @@ def custom_oracle(num_qubits):
 
 ```python
 qc = QuantumCircuit(num_qubits)
-qc.h([0, 1])  # Initialize qubits in superposition
+qc.h([0, 1])
 qc.compose(oracle_circuit, inplace=True)
 qc.h([0, 1])
 qc.measure_all()
@@ -160,19 +156,18 @@ cv_scores = cross_val_score(svm_quantum, X, y, cv=5)
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 
-plt.figure(figsize=(14, 6))
-
-# Subplot 1: Scatter plot of features
 plt.subplot(1, 2, 1)
-plt.scatter(X[:, 0], X[:, 1], c=y, cmap=ListedColormap(['red', 'green', 'blue']), edgecolor='k')
-plt.title('Breast Cancer Data - Feature Distribution')
-plt.xlabel('Feature 1')
-plt.ylabel('Feature 2')
+feature_1_name = cancer.feature_names[0]
+feature_2_name = cancer.feature_names[1]
 
-# Subplot 2: Accuracy Comparison
+plt.scatter(X[:, 0], X[:, 1], c=y, cmap=ListedColormap(['red', 'green', 'blue']), edgecolor='k')
+plt.title('Breast Cancer Data - Distribution')
+plt.xlabel(feature_1_name)
+plt.ylabel(feature_2_name)
+
 plt.subplot(1, 2, 2)
-plt.bar(['Classical SVM', 'Quantum-Optimized SVM'], 
-        [accuracy_score(y_test, y_pred) * 100, np.max(cv_scores) * 100], 
+plt.bar(['Classical SVM', 'Quantum-Optimized SVM'],
+        [accuracy_score(y_test, y_pred) * 100, np.max(cv_scores) * 100],
         color=['orange', 'purple'])
 plt.title('Accuracy Comparison')
 plt.ylabel('Accuracy (%)')
@@ -182,7 +177,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-**Visualization**: Two visualizations are created: 
+**Visualization**: Two visualizations are created:
 
 1. A scatter plot showing the distribution of the cancer data in two feature dimensions.
 2. A bar plot comparing the accuracy of the classical SVM model and the quantum-optimized SVM.
