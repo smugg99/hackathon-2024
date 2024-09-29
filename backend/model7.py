@@ -3,17 +3,20 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import OneHotEncoder, StandardScaler, LabelEncoder
+import matplotlib.pyplot as plt
 from qiskit_aer import AerSimulator
 from qiskit import QuantumCircuit, transpile
+from qiskit_algorithms import Grover
+from torch.utils.data import DataLoader, TensorDataset, random_split
+from matplotlib.colors import ListedColormap
+
+# Check for CUDA
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"Using device: {device}")
 
 # Load and preprocess data
 df = pd.read_csv("./depression_data.csv")
-print(df.head())
-print(df.describe())
-
 df.drop("Name", axis=1, inplace=True)
 
 df.rename(
@@ -47,12 +50,12 @@ ohe_categorical_columns = [
     "diet",
     "sleep",
 ]
-ohe = OneHotEncoder(sparse_output=False)
-encoded_data = ohe.fit_transform(df[ohe_categorical_columns])
-encoded_df = pd.DataFrame(
-    encoded_data, columns=ohe.get_feature_names_out(ohe_categorical_columns)
-)
-df = pd.concat([df, encoded_df], axis=1).drop(ohe_categorical_columns, axis=1)
+print(df.head())
+
+ohe = LabelEncoder()
+for column in ohe_categorical_columns:
+    print(ohe.fit_transform(df[column]))
+    df[column] = ohe.fit_transform(df[column])
 
 # Mapping yes/no columns
 yes_no_columns = [
@@ -69,84 +72,64 @@ df["income"] = (df["income"] - df["income"].min()) / (
     df["income"].max() - df["income"].min()
 )
 
-print(df.info())
+# Standardizing numerical columns using torch
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(df.drop("chronic_conditions", axis=1))
 
-X = df[[col for col in df.columns if col != "chronic_conditions"]].values
-Y = df["chronic_conditions"].values
+X = torch.FloatTensor(X_scaled).to(device)  # Transfer to CUDA if available
+Y = (
+    torch.FloatTensor(df["chronic_conditions"].values).view(-1, 1).to(device)
+)  # Transfer to CUDA if available
 
-# Train-test split
-X_train, X_test, y_train, y_test = train_test_split(
-    X, Y, test_size=0.2, random_state=42
-)
+# Split the data into training and testing using random_split
+train_size = int(0.8 * len(X))
+test_size = len(X) - train_size
+train_data, test_data = random_split(TensorDataset(X, Y), [train_size, test_size])
+
+train_loader = DataLoader(train_data, batch_size=64, shuffle=True)
+test_loader = DataLoader(test_data, batch_size=64, shuffle=False)
 
 
-# Define the neural network model
-class NeuralNetwork(nn.Module):
-    def __init__(self, input_size):
-        super(NeuralNetwork, self).__init__()
-        self.fc1 = nn.Linear(input_size, 64)
-        self.fc2 = nn.Linear(64, 32)
-        self.fc3 = nn.Linear(32, 1)  # Binary classification output
+# Define SVM-like model using PyTorch
+class SVMTorch(nn.Module):
+    def __init__(self, input_size, C=1.0):
+        super(SVMTorch, self).__init__()
+        self.fc = nn.Linear(input_size, 1)
+        self.C = C
 
     def forward(self, x):
-        x = torch.relu(self.fc1(x))
-        x = torch.relu(self.fc2(x))
-        x = torch.sigmoid(self.fc3(x))
-        return x
+        return self.fc(x)
+
+    def svm_loss(self, outputs, labels):
+        hinge_loss = torch.mean(torch.clamp(1 - outputs * labels, min=0))
+        reg_loss = 0.5 * torch.norm(self.fc.weight) ** 2
+        return self.C * hinge_loss + reg_loss
 
 
-# Check for CUDA
-if torch.cuda.is_available():
-    device = torch.device("cuda")
-elif torch.backends.mps.is_available():
-    device = torch.device("mps")
-else:
-    device = torch.device("cpu")
-
-# Convert data to PyTorch tensors and move to device
-X_train_tensor = torch.FloatTensor(X_train).to(device)
-y_train_tensor = torch.FloatTensor(y_train).view(-1, 1).to(device)
-X_test_tensor = torch.FloatTensor(X_test).to(device)
-y_test_tensor = torch.FloatTensor(y_test).view(-1, 1).to(device)
-
-# Instantiate model, define loss function and optimizer
-model = NeuralNetwork(input_size=X.shape[1]).to(device)  # Move model to device
-criterion = nn.BCELoss()  # Binary Cross Entropy loss
-optimizer = optim.Adam(model.parameters(), lr=0.001)
-
-# Training the model
-num_epochs = 10000
-for epoch in range(num_epochs):
+# Train SVM model
+def train_svm(model, optimizer, criterion, train_loader, num_epochs=100):
     model.train()
-    optimizer.zero_grad()
-    outputs = model(X_train_tensor)
-    loss = criterion(outputs, y_train_tensor)
-    loss.backward()
-    optimizer.step()
-
-    if (epoch + 1) % 10 == 0:
-        print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}")
-
-# Evaluate the model
-model.eval()
-with torch.no_grad():
-    y_pred_prob = model(X_test_tensor)
-    y_pred = (y_pred_prob > 0.5).float()  # Threshold at 0.5
-
-accuracy = accuracy_score(
-    y_test, y_pred.cpu().numpy()
-)  # Move predictions to CPU for scoring
-print(f"Accuracy of the neural network: {accuracy * 100:.2f}%")
+    for epoch in range(num_epochs):
+        total_loss = 0
+        for batch_X, batch_y in train_loader:
+            optimizer.zero_grad()
+            outputs = model(batch_X)
+            loss = model.svm_loss(outputs, batch_y)
+            loss.backward()
+            optimizer.step()
+            total_loss += loss.item()
+        if (epoch + 1) % 10 == 0:
+            print(
+                f"Epoch [{epoch+1}/{num_epochs}], Loss: {total_loss/len(train_loader):.4f}"
+            )
 
 
-# Quantum optimization section
+# Quantum optimization section using Grover's algorithm
 def custom_oracle(num_qubits):
     # Create a quantum circuit for the oracle
     qc = QuantumCircuit(num_qubits)
-
     # Example oracle: phase inversion for a specific state
     qc.cz(0, 1)  # Invert phase for the state |11|
-
     return qc
 
 
@@ -163,16 +146,61 @@ qc.h([0, 1])  # Apply Hadamard gates again
 qc.measure_all()  # Add measurement to all qubits
 
 # Running the simulation using AerSimulator
-backend = AerSimulator(device="GPU")  # Using AerSimulator
+backend = AerSimulator()  # Using AerSimulator
 qc = transpile(qc, backend)  # Transpile the circuit
 job = backend.run(qc, shots=1024)  # Run the simulation
 result = job.result()
 counts = result.get_counts()
 
 state_to_C = {"00": 0.1, "01": 1, "10": 10, "11": 100}
-
-# Identify the state with the highest measurement count
 optimal_state = max(counts, key=counts.get)
 best_C_from_grover = state_to_C[optimal_state]
 
 print(f"Best C value obtained from quantum optimization: {best_C_from_grover}")
+
+# First run SVM model with default C=1.0
+model_classical = SVMTorch(input_size=X.shape[1], C=1.0).to(
+    device
+)  # Transfer model to CUDA if available
+optimizer_classical = optim.SGD(model_classical.parameters(), lr=0.001)
+train_svm(model_classical, optimizer_classical, model_classical.svm_loss, train_loader)
+
+# Second run SVM model with quantum-optimized C
+model_quantum = SVMTorch(input_size=X.shape[1], C=best_C_from_grover).to(
+    device
+)  # Transfer model to CUDA if available
+optimizer_quantum = optim.SGD(model_quantum.parameters(), lr=0.001)
+train_svm(model_quantum, optimizer_quantum, model_quantum.svm_loss, train_loader)
+
+
+# Evaluation function for the models
+def evaluate_svm(model, test_loader):
+    model.eval()
+    correct = 0
+    total = 0
+    with torch.no_grad():
+        for batch_X, batch_y in test_loader:
+            outputs = model(batch_X)
+            predicted = torch.sign(outputs)  # SVM outputs hinge scores
+            correct += (predicted == batch_y).sum().item()
+            total += batch_y.size(0)
+    return correct / total
+
+
+# Evaluate the classical and quantum-optimized models
+accuracy_classical = evaluate_svm(model_classical, test_loader)
+accuracy_quantum = evaluate_svm(model_quantum, test_loader)
+
+print(f"Classical SVM Accuracy: {accuracy_classical * 100:.2f}%")
+print(f"Quantum-Optimized SVM Accuracy: {accuracy_quantum * 100:.2f}%")
+
+# Visualization of model accuracies
+plt.figure(figsize=(8, 6))
+plt.bar(
+    ["Classical SVM", "Quantum-Optimized SVM"],
+    [accuracy_classical * 100, accuracy_quantum * 100],
+    color=["orange", "purple"],
+)
+plt.title("Comparison of Classical vs Quantum-Optimized SVM")
+plt.ylabel("Accuracy (%)")
+plt.show()
