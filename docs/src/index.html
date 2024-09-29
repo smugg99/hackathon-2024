@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>index.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+<link rel="stylesheet" href="file:///home/karol/Documents/Repositories/BS/hackathon-2024/docs/styles/" type="text/css">
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<!-- markdownlint-disable MD033 -->
+<!-- markdownlint-disable MD041 -->
+<h1 id="quantum-optimization-with-classical-machine-learning">Quantum Optimization with Classical Machine Learning</h1>
+<p>This document explains in-depth how classical and quantum optimization techniques are applied in machine learning, specifically in the context of breast cancer classification using Support Vector Machines (SVM). The code presented combines both classical machine learning with quantum computing techniques using Qiskit.</p>
+<h2 id="1-data-preparation">1. Data Preparation</h2>
+<h3 id="loading-the-breast-cancer-dataset">Loading the Breast Cancer Dataset</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> sklearn <span class="hljs-keyword">import</span> datasets
+<span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> train_test_split
+
+<span class="hljs-comment"># Load the breast cancer dataset</span>
+cancer = datasets.load_breast_cancer()
+X, y = cancer.data, cancer.target
+</div></code></pre>
+<p><strong>Explanation:</strong></p>
+<ul>
+<li><strong>Breast Cancer Dataset</strong>: The code uses the popular <strong>Breast Cancer</strong> dataset from <code>scikit-learn</code>. This dataset contains features related to breast cancer tumor characteristics.</li>
+<li><strong>Features (X)</strong>: The characteristics of the cancer (e.g., size, shape, etc.).</li>
+<li><strong>Labels (y)</strong>: Binary classification (1 for malignant, 0 for benign).</li>
+</ul>
+<h3 id="splitting-the-data">Splitting the Data</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># Split data into training and test sets</span>
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="hljs-number">0.2</span>, random_state=<span class="hljs-number">42</span>)
+</div></code></pre>
+<ul>
+<li><strong>Training/Test Split</strong>: The dataset is split into training (80%) and testing (20%) sets using <code>train_test_split</code>. The <strong>random_state</strong> ensures reproducibility.</li>
+</ul>
+<div class="page"/>
+<h2 id="2-classical-optimization-svm-with-grid-search">2. Classical Optimization: SVM with Grid Search</h2>
+<h3 id="svm-model-and-hyperparameter-tuning">SVM Model and Hyperparameter Tuning</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> GridSearchCV
+<span class="hljs-keyword">from</span> sklearn.svm <span class="hljs-keyword">import</span> SVC
+<span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> accuracy_score
+
+<span class="hljs-comment"># Define parameter grid for C values and kernel types</span>
+param_grid = {<span class="hljs-string">'C'</span>: [<span class="hljs-number">0.1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">10</span>, <span class="hljs-number">100</span>], <span class="hljs-string">'kernel'</span>: [<span class="hljs-string">'linear'</span>]}
+grid_search = GridSearchCV(SVC(), param_grid, refit=<span class="hljs-literal">True</span>, verbose=<span class="hljs-number">1</span>)
+grid_search.fit(X_train, y_train)
+
+<span class="hljs-comment"># Evaluate the best model</span>
+best_model = grid_search.best_estimator_
+y_pred = best_model.predict(X_test)
+</div></code></pre>
+<p><strong>Explanation:</strong></p>
+<ul>
+<li><strong>Support Vector Machine (SVM)</strong>: This is a popular supervised learning algorithm used for classification tasks.</li>
+<li><strong>GridSearchCV</strong>: This technique is used to optimize hyperparameters of the SVM model. Here, it searches for the best value of the regularization parameter <strong>C</strong> and uses a <strong>linear kernel</strong>.</li>
+<li><strong>C Parameter</strong>: This controls the trade-off between achieving a low training error and a low testing error.</li>
+<li><strong>Best Model</strong>: After training, the best model is selected based on the highest accuracy on the validation set.</li>
+</ul>
+<h3 id="evaluating-accuracy">Evaluating Accuracy</h3>
+<pre class="hljs"><code><div>print(<span class="hljs-string">f"Najlepsze parametry (klasyczna optymalizacja): <span class="hljs-subst">{grid_search.best_params_}</span>"</span>)
+print(<span class="hljs-string">f"Dokładność klasycznego SVM: <span class="hljs-subst">{accuracy_score(y_test, y_pred) * <span class="hljs-number">100</span>:<span class="hljs-number">.2</span>f}</span>%"</span>)
+</div></code></pre>
+<ul>
+<li><strong>Accuracy</strong>: The accuracy of the classical SVM is evaluated on the test set, which gives insight into how well the model generalizes to unseen data.</li>
+</ul>
+<div class="page"/>
+<h2 id="3-quantum-optimization-grovers-algorithm">3. Quantum Optimization: Grover's Algorithm</h2>
+<h3 id="custom-oracle-for-quantum-circuit">Custom Oracle for Quantum Circuit</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> qiskit <span class="hljs-keyword">import</span> QuantumCircuit
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">custom_oracle</span><span class="hljs-params">(num_qubits)</span>:</span>
+    qc = QuantumCircuit(num_qubits)
+    qc.cz(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>)  <span class="hljs-comment"># Phase flip for state |11&gt;</span>
+    <span class="hljs-keyword">return</span> qc
+</div></code></pre>
+<p><strong>Explanation:</strong></p>
+<ul>
+<li><strong>Grover’s Algorithm</strong>: This is a quantum search algorithm used to find a specific element from an unstructured list. It can also be used for optimization.</li>
+<li><strong>Oracle</strong>: The oracle is a quantum subroutine that marks the correct solution (or optimal value) by applying a phase flip (inverting the amplitude of the correct answer).</li>
+<li><strong>Custom Oracle</strong>: In this case, the oracle flips the phase when the qubits are in the state |11&gt;, marking it as the solution.</li>
+</ul>
+<h3 id="grovers-circuit">Grover’s Circuit</h3>
+<pre class="hljs"><code><div>qc = QuantumCircuit(num_qubits)
+qc.h([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>])  <span class="hljs-comment"># Initialize qubits in superposition</span>
+qc.compose(oracle_circuit, inplace=<span class="hljs-literal">True</span>)
+qc.h([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>])
+qc.measure_all()
+</div></code></pre>
+<ul>
+<li><strong>Superposition</strong>: All qubits are initialized in superposition using Hadamard gates, allowing the quantum computer to explore all possible states simultaneously.</li>
+<li><strong>Quantum Circuit Composition</strong>: The oracle circuit is composed (added) to the main Grover’s circuit.</li>
+<li><strong>Measurement</strong>: The quantum circuit is measured to extract the optimal state after running the quantum algorithm.</li>
+</ul>
+<div class="page"/>
+<h3 id="simulation-of-quantum-circuit">Simulation of Quantum Circuit</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> qiskit_aer <span class="hljs-keyword">import</span> AerSimulator
+<span class="hljs-keyword">from</span> qiskit <span class="hljs-keyword">import</span> transpile
+
+backend = AerSimulator()
+qc = transpile(qc, backend)
+job = backend.run(qc, shots=<span class="hljs-number">1024</span>)
+result = job.result()
+counts = result.get_counts()
+</div></code></pre>
+<ul>
+<li><strong>AerSimulator</strong>: This is a quantum simulator from Qiskit that simulates how quantum circuits would behave on real quantum hardware.</li>
+<li><strong>Transpilation</strong>: The quantum circuit is optimized for the specific backend (in this case, the simulator).</li>
+<li><strong>Result</strong>: The results of the quantum simulation are analyzed to determine which state (among |00|, |01|, |10|, and |11|) occurs the most frequently.</li>
+</ul>
+<h3 id="mapping-quantum-states-to-c-values">Mapping Quantum States to C Values</h3>
+<pre class="hljs"><code><div>state_to_C = {
+    <span class="hljs-string">'00'</span>: <span class="hljs-number">0.1</span>,
+    <span class="hljs-string">'01'</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-string">'10'</span>: <span class="hljs-number">10</span>,
+    <span class="hljs-string">'11'</span>: <span class="hljs-number">100</span>
+}
+
+optimal_state = max(counts, key=counts.get)
+best_C_from_grover = state_to_C[optimal_state]
+</div></code></pre>
+<ul>
+<li><strong>State Mapping</strong>: The measured quantum states are mapped to possible values of <strong>C</strong> (regularization parameter). The state with the highest count is chosen as the optimal value.</li>
+<li><strong>Grover Optimization</strong>: The best value of <strong>C</strong> is obtained through the quantum optimization process using Grover’s algorithm.</li>
+</ul>
+<div class="page"/>
+<h2 id="4-applying-quantum-optimized-c-to-svm">4. Applying Quantum-Optimized C to SVM</h2>
+<pre class="hljs"><code><div>svm_quantum = SVC(kernel=<span class="hljs-string">'linear'</span>, C=best_C_from_grover)
+svm_quantum.fit(X_train, y_train)
+</div></code></pre>
+<ul>
+<li><strong>Quantum-Optimized SVM</strong>: The value of <strong>C</strong> found using Grover's algorithm is used to train a new SVM model. This showcases a hybrid approach where quantum algorithms assist in hyperparameter optimization for classical machine learning models.</li>
+</ul>
+<h3 id="cross-validation">Cross-Validation</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> cross_val_score
+cv_scores = cross_val_score(svm_quantum, X, y, cv=<span class="hljs-number">5</span>)
+</div></code></pre>
+<ul>
+<li><strong>Cross-Validation</strong>: The quantum-optimized SVM model is evaluated using 5-fold cross-validation, which splits the data into 5 parts and trains the model on different subsets to ensure generalization.</li>
+</ul>
+<div class="page"/>
+<h2 id="5-visualization-of-results">5. Visualization of Results</h2>
+<h3 id="plotting-the-data">Plotting the Data</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt
+<span class="hljs-keyword">from</span> matplotlib.colors <span class="hljs-keyword">import</span> ListedColormap
+
+plt.figure(figsize=(<span class="hljs-number">14</span>, <span class="hljs-number">6</span>))
+
+<span class="hljs-comment"># Subplot 1: Scatter plot of features</span>
+plt.subplot(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>)
+plt.scatter(X[:, <span class="hljs-number">0</span>], X[:, <span class="hljs-number">1</span>], c=y, cmap=ListedColormap([<span class="hljs-string">'red'</span>, <span class="hljs-string">'green'</span>, <span class="hljs-string">'blue'</span>]), edgecolor=<span class="hljs-string">'k'</span>)
+plt.title(<span class="hljs-string">'Breast Cancer Data - Feature Distribution'</span>)
+plt.xlabel(<span class="hljs-string">'Feature 1'</span>)
+plt.ylabel(<span class="hljs-string">'Feature 2'</span>)
+
+<span class="hljs-comment"># Subplot 2: Accuracy Comparison</span>
+plt.subplot(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>)
+plt.bar([<span class="hljs-string">'Classical SVM'</span>, <span class="hljs-string">'Quantum-Optimized SVM'</span>], 
+        [accuracy_score(y_test, y_pred) * <span class="hljs-number">100</span>, np.max(cv_scores) * <span class="hljs-number">100</span>], 
+        color=[<span class="hljs-string">'orange'</span>, <span class="hljs-string">'purple'</span>])
+plt.title(<span class="hljs-string">'Accuracy Comparison'</span>)
+plt.ylabel(<span class="hljs-string">'Accuracy (%)'</span>)
+plt.ylim(<span class="hljs-number">90</span>, <span class="hljs-number">100</span>)
+
+plt.tight_layout()
+plt.show()
+</div></code></pre>
+<ul>
+<li><strong>Visualization</strong>: Two visualizations are created:
+<ol>
+<li>A scatter plot showing the distribution of the cancer data in two feature dimensions.</li>
+<li>A bar plot comparing the accuracy of the classical SVM model and the quantum-optimized SVM.</li>
+</ol>
+</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>This code demonstrates the use of <strong>quantum computing</strong> to optimize machine learning models. Specifically, <strong>Grover’s Algorithm</strong> helps to find the best hyperparameters for the <strong>SVM</strong> model by exploring possible values in a quantum-enhanced manner. The classical <strong>GridSearchCV</strong> is compared to quantum optimization, showing the potential for hybrid quantum-classical algorithms in real-world machine learning tasks.</p>
+
+</body>
+</html>

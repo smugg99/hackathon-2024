@@ -1,0 +1,155 @@
+/*
+ * Markdown PDF CSS (Dark Theme with Heading Colors and Lighter Text)
+ */
+
+body {
+	font-family: -apple-system, "Overpass", "Inter", BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+	margin-top: 1.5cm;
+	margin-left: 1cm;
+	margin-right: 1cm;
+	margin-bottom: 1cm;
+	color: #d8dee9;
+	/* Lighter text color */
+	background-color: #2E3440;
+	/* Dark background color */
+}
+
+pre {
+	background-color: #3B4252;
+	/* Darker background for code blocks */
+	border: 1px solid #4C566A;
+	/* Border color */
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(255, 255, 255, 0.1);
+	/* Border color for blockquote */
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+	color: #bfc7d5;
+	/* Lighter code color */
+}
+
+/* for inline code */
+:not(pre):not(.hljs)>code {
+	color: #e5c07b;
+	/* Inline code color */
+}
+
+/* Page Break */
+.page {
+	page-break-after: always;
+}
+
+h5 {
+	margin-top: 0;
+	margin-bottom: 0;
+	font-weight: bold;
+	color: #d8dee9;
+	/* Heading color */
+}
+
+.info-table {
+	text-align: right;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	white-space: nowrap;
+	margin-bottom: 20px;
+}
+
+.right-side {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	height: 200px;
+	margin-bottom: 20px;
+}
+
+.right-side h5 {
+	margin: 0 10px;
+	white-space: nowrap;
+	color: #d8dee9;
+	/* Text color */
+}
+
+.title {
+	margin-top: 12px;
+	margin-bottom: 24px;
+	font-size: x-large;
+	font-weight: bold;
+	text-decoration: none;
+	color: #e5c07b;
+	/* Title color */
+}
+
+.footer {
+	margin: 0;
+	font-size: large;
+	font-weight: bold;
+	text-decoration: none;
+	color: #d8dee9;
+	/* Footer color */
+}
+
+.signature {
+	margin: 0;
+	font-size: large;
+	font-weight: normal;
+	text-decoration: none;
+	color: #d8dee9;
+	/* Signature color */
+}
+
+h2 {
+	text-decoration: none;
+	margin-top: 12px;
+	margin-bottom: 12px;
+	font-weight: bold;
+	color: #d8dee9;
+	/* Heading color */
+}
+
+h2.emphasis {
+	color: #81A1C1;
+	/* Color for emphasized heading */
+}
+
+h2.italic {
+	font-style: italic;
+	color: #88C0D0;
+	/* Color for italic heading */
+}
+
+.above {
+	float: right;
+	white-space: nowrap;
+}
+
+.background {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: #2E3440;
+	z-index: -999;
+}
