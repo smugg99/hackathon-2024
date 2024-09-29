@@ -8,6 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from qiskit_aer import AerSimulator
 from qiskit import QuantumCircuit, transpile
+from sklearn.svm import SVC
 
 # Load and preprocess data
 df = pd.read_csv("./depression_data.csv")
